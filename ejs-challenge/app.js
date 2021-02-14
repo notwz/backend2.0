@@ -55,16 +55,16 @@ app.post("/compose" , function(req, res){
 });
 
 app.get("/posts/:postName", function(req, res) {
-  const requestedTitle = _.lowerCase(req.params.postName); 
+  const requestedTitle = _.kebabCase(req.params.postName); 
   
   posts.forEach(function (post){
 
-    let storedTitle = _.lowerCase(post.title);
+    let storedTitle = _.kebabCase(post.title);
 
     if(requestedTitle === storedTitle){
      res.render("post", {
        title: post.title, 
-       content: post.content.substring(0, 100)
+       content: post.content
      })
 
     } 
