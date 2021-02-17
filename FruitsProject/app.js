@@ -10,22 +10,24 @@ mongoose.connect("mongodb://localhost:27017/fruitsDB", {useNewUrlParser: true, u
 // --- replaces the insertDocument code of MongoDB ---- 
 //creating schema
 //tells the name of attribute and its datatype
-const fruitSchema = new mongoose.Schema( { 
+
+//comment out due to updated code below 
+/* const fruitSchema = new mongoose.Schema( { 
     name: String, 
     rating: Number,
     review: String
-});
+}); */
 
 //create mongoose model
 //will automatically create collection of plural version of Fruit => fruits 
-const Fruit = mongoose.model("Fruit", fruitSchema);
+//const Fruit = mongoose.model("Fruit", fruitSchema);
 
-//create fruit document 
-const fruit = new Fruit ( {
+//create fruit document A
+/* const fruit = new Fruit ( {
     name: "Apple",
     rating: 7,
     review: "Pretty solid as a fruit"
-});
+}); */
 
 //comment out so you dont save the same data every time you run app.js
 //fruit.save(); 
@@ -34,15 +36,31 @@ const fruit = new Fruit ( {
 
 const personSchema = new mongoose.Schema( {
     name: String, 
-    age: Number
+    age: Number,
+    favouriteFruit: fruitSchema //relationship 
 });
 
 const Person = mongoose.model("Person", personSchema); 
 
-const person = new Person( {
-    name: "John",
-    age: 37
+
+//creates new docu
+const pineapple = new Fruit( {
+    name: "Pineapple",
+    score: 9,
+    review: "Greate"
 });
+
+pineapple.save();
+
+
+//create new person - > can just overwrite old John code 
+
+const person = new Person( {
+    name: "Amy",
+    age: 12,
+    favouriteFruit: pineapple 
+});
+
 
 //person.save(); 
 
@@ -109,6 +127,8 @@ const fruitSchema = new mongoose.Schema( {
     },
     review: String
 });
+
+const Fruit = mongoose.model("Fruit", fruitSchema);
 //forget to put name? see above
 
 //Updating and Deleting Data 
@@ -139,3 +159,5 @@ People.deleteMany({ name: "John"}, function(err) {
         console.log("Deleted many!");
     }
 });
+
+//Establishing Relationships and Embedding Documents 
