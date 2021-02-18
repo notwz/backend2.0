@@ -44,14 +44,8 @@ const item3 = new Item ( {
 const defaultItems = [item1, item2, item3];
 
 
-// blocked out to stop saving it 
-/* Item.insertMany(defaultItems, function(err) {
-  if (err) {
-    console.log(err); 
-  } else {
-    console.log("Successfully saved data into the DB!");
-  }
-}); */
+
+
 
 
 
@@ -60,8 +54,24 @@ app.get("/", function(req, res) {
 
   //second param is a callback function. 'foundItems' is the variable we create, can be name anything we want. 
   Item.find({}, function (err, foundItems) {
-    //console.log(foundItems);
-    res.render("list", {listTitle: "Today", newListItems: foundItems});
+
+    console.log(foundItems); 
+
+    // checks to see if the arr is empty, only then will it load data into the arr 
+    if (foundItems.length === 0) {
+      Item.insertMany(defaultItems, function(err) {
+        if (err) {
+          console.log(err); 
+        } else {
+          console.log("Successfully saved data into the DB!");
+        }
+      });
+      res.redirect("/");
+    } else { 
+      res.render("list", {listTitle: "Today", newListItems: foundItems});
+
+    }
+    
   });
 
   
