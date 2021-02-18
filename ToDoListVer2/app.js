@@ -58,9 +58,13 @@ const defaultItems = [item1, item2, item3];
 
 app.get("/", function(req, res) {
 
+  //second param is a callback function. 'foundItems' is the variable we create, can be name anything we want. 
+  Item.find({}, function (err, foundItems) {
+    //console.log(foundItems);
+    res.render("list", {listTitle: "Today", newListItems: foundItems});
+  });
 
-
-  res.render("list", {listTitle: "Today", newListItems: defaultItems});
+  
 
 });
 
