@@ -43,13 +43,15 @@ const item3 = new Item ( {
 //adding to arr
 const defaultItems = [item1, item2, item3];
 
-Item.insertMany(defaultItems, function(err) {
+
+// blocked out to stop saving it 
+/* Item.insertMany(defaultItems, function(err) {
   if (err) {
     console.log(err); 
   } else {
     console.log("Successfully saved data into the DB!");
   }
-});
+}); */
 
 
 
@@ -58,7 +60,7 @@ app.get("/", function(req, res) {
 
 
 
-  res.render("list", {listTitle: "Today", newListItems: items});
+  res.render("list", {listTitle: "Today", newListItems: defaultItems});
 
 });
 
