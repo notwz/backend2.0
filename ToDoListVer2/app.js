@@ -3,7 +3,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose"); 
-const date = require(__dirname + "/date.js");
+
 
 const app = express();
 
@@ -14,7 +14,8 @@ app.use(express.static("public"));
 
 
 //--- basic mongoose setup --- 
-mongoose.connect("mongodb://localhost:27017/todolistDB", {useNewUrlParser: true});
+mongoose.connect("mongodb://localhost:27017/todolistDB", {useNewUrlParser: true,
+useUnifiedTopology: true});
 
 //establishing the schema for a new item object 
 const itemsSchema = new mongoose.Schema( {
@@ -46,7 +47,7 @@ Item.insertMany(defaultItems, function(err) {
   if (err) {
     console.log(err); 
   } else {
-    console.log("success")
+    console.log("Successfully saved data into the DB!");
   }
 });
 
@@ -55,7 +56,7 @@ Item.insertMany(defaultItems, function(err) {
 
 app.get("/", function(req, res) {
 
-const day = date.getDate();
+
 
   res.render("list", {listTitle: "Today", newListItems: items});
 
