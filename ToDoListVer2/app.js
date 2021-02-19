@@ -50,7 +50,7 @@ app.get("/", function(req, res) {
   //second param is a callback function. 'foundItems' is the variable we create, can be name anything we want. 
   Item.find({}, function (err, foundItems) {
 
-    console.log(foundItems); 
+    //console.log(foundItems); 
 
     // checks to see if the arr is empty, only then will it load data into the arr 
     if (foundItems.length === 0) {
@@ -88,6 +88,20 @@ app.post("/", function(req, res){
 
 
 });
+
+
+app.post("/delete", function(req, res) {
+  const checkedItemId = req.body.checkbox; 
+  Item.findByIdAndRemove(checkedItemId, function(err) {
+    if(!err) { 
+      console.log("sucessfuly deleted");
+    } 
+  });
+  res.redirect('/');
+
+
+})
+
 
 app.get("/work", function(req,res){
   res.render("list", {listTitle: "Work List", newListItems: workItems});
