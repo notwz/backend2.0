@@ -45,11 +45,6 @@ const defaultItems = [item1, item2, item3];
 
 
 
-
-
-
-
-
 app.get("/", function(req, res) {
 
   //second param is a callback function. 'foundItems' is the variable we create, can be name anything we want. 
@@ -78,17 +73,20 @@ app.get("/", function(req, res) {
 
 });
 
+//adding new items to list
 app.post("/", function(req, res){
 
-  const item = req.body.newItem;
+  const itemName = req.body.newItem;
+  
+  const item = new Item( {
+    name: itemName
+  })
 
-  if (req.body.list === "Work") {
-    workItems.push(item);
-    res.redirect("/work");
-  } else {
-    items.push(item);
-    res.redirect("/");
-  }
+  item.save();
+  res.redirect("/");
+
+
+
 });
 
 app.get("/work", function(req,res){
