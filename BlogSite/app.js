@@ -13,7 +13,6 @@ const contactContent = "Scelerisque eleifend donec pretium vulputate sapien. Rho
 
 const app = express();
 
-let posts = [];
 
 app.set('view engine', 'ejs');
 
@@ -34,9 +33,12 @@ const Post = mongoose.model("Post", postSchema);
 
 
 app.get("/", function (req, res) {
-  res.render("home", {
-    startingContent : homeStartingContent,
-    posts: posts
+  
+  Post.find( {}, function(err, posts) {
+    res.render("home", {
+      startingContent: homeStartingContent,
+      posts: posts
+    });
   });
        
 });
@@ -61,10 +63,14 @@ app.post("/compose" , function(req, res){
     content: req.body.postBody
   });
 
-  post.save();
+  post.save(function(err) {
+    if(!err) {
+      res.redirect("/"); 
+    }
+  });
 
 
-  res.redirect("/");
+  //res.redirect("/");
 
 
 });
