@@ -87,6 +87,15 @@ app.route("/articles/:articleTitle")
                     res.send(err);
                 }
             });
+    })
+
+    .put( function (req, res) {
+        Article.update( { title: req.params.articleTitle}, 
+            { title: req.body.title, content: req.body.content}, 
+            { overwrite: true},
+            function(err) {
+                res.send(err || "Successfully updated");
+            } )
     });
 
 //our app is listening on set port 
