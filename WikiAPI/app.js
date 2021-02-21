@@ -31,7 +31,13 @@ const articleSchema = {
 
 const Article = mongoose.model("Article", articleSchema);
     
-app.get("/articles", function (req, res) { 
+
+//want to save data that is sent over into a document 
+//chainable refactored code!
+
+app.route("/articles")
+
+.get(function (req, res) { 
     Article.find(function(err, foundArticles) {
         if(!err) {
             console.log(foundArticles);
@@ -41,10 +47,9 @@ app.get("/articles", function (req, res) {
         }
         
     });
-});
+})
 
-//want to save data that is sent over into a document 
-app.post("/articles", function (req, res) {
+.post(function (req, res) {
 
     const article= new Article ({
         title: req.body.title,
@@ -60,13 +65,14 @@ app.post("/articles", function (req, res) {
 
     console.log(req.body.title);
     console.log(req.body.content);
-});
+})
 
-app.delete("/articles", function(req, rest) {
+.delete(function(req, rest) {
     Article.deleteMany(function(err) {
         res.send(err || "Sucessfully deleted");
     });
 });
+
 
 //our app is listening on set port 
 app.listen(3000, function() { 
