@@ -90,12 +90,23 @@ app.route("/articles/:articleTitle")
     })
 
     .put( function (req, res) {
-        Article.update( { title: req.params.articleTitle}, 
+        Article.updateOne( { title: req.params.articleTitle}, 
             { title: req.body.title, content: req.body.content}, 
             { overwrite: true},
             function(err) {
                 res.send(err || "Successfully updated");
             } )
+    })
+
+    .patch( function(req, res) { 
+        console.log("Working..");
+        console.log(req.body);
+        Article.updateOne( 
+            { title: req.params.articleTitle } ,
+            {$set: req.body }, //alternatively, just leave this line as req.body, $set and {} are not needed
+            function(err) {
+                res.send(err || "Successfully updated");
+            });
     });
 
 //our app is listening on set port 
