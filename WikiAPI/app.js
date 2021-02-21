@@ -107,6 +107,15 @@ app.route("/articles/:articleTitle")
             function(err) {
                 res.send(err || "Successfully updated");
             });
+    })
+
+    .delete( function( req, res) {
+        Article.deleteOne( 
+            { title: req.params.articleTitle}, 
+            function (err) {
+                res.send(err || "Successfully deleted")
+            }
+        )
     });
 
 //our app is listening on set port 
