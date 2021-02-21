@@ -37,42 +37,57 @@ const Article = mongoose.model("Article", articleSchema);
 
 app.route("/articles")
 
-.get(function (req, res) { 
-    Article.find(function(err, foundArticles) {
-        if(!err) {
-            console.log(foundArticles);
-            res.send(foundArticles);
-        }else {
-            res.send(err);
-        }
-        
+    .get(function (req, res) { 
+        Article.find(function(err, foundArticles) {
+            if(!err) {
+                console.log(foundArticles);
+                res.send(foundArticles);
+            }else {
+                res.send(err);
+            }
+            
+        });
+    })
+
+    .post(function (req, res) {
+
+        const article= new Article ({
+            title: req.body.title,
+            content: req.body.content
+        });
+        article.save(function(err) {
+            if(!err) { 
+                res.send("sucessfully added a new article");
+            } else {
+                res.send(err);
+            }
+        });
+
+        console.log(req.body.title);
+        console.log(req.body.content);
+    })
+
+    .delete(function(req, rest) {
+        Article.deleteMany(function(err) {
+            res.send(err || "Sucessfully deleted");
+        });
     });
-})
 
-.post(function (req, res) {
 
-    const article= new Article ({
-        title: req.body.title,
-        content: req.body.content
+// ---- targeting specific routes ----
+app.route("/articles/:articleTitle")
+
+    .get(function (req, res) {
+        Article.findOne( {title: req.params.articleTitle}, 
+            function(err, foundArticle) {
+                if(foundArticle) { 
+                    res.send(foundArticle)
+                } else {
+                    //res.send("No articles matching that title was found");
+                    res.send(err);
+                }
+            });
     });
-    article.save(function(err) {
-        if(!err) { 
-            res.send("sucessfully added a new article");
-        } else {
-            res.send(err);
-        }
-    });
-
-    console.log(req.body.title);
-    console.log(req.body.content);
-})
-
-.delete(function(req, rest) {
-    Article.deleteMany(function(err) {
-        res.send(err || "Sucessfully deleted");
-    });
-});
-
 
 //our app is listening on set port 
 app.listen(3000, function() { 
