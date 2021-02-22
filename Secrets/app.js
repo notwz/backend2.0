@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const ejs = require('ejs');
 const mongoose = require("mongoose");
-const encrypt = require("mongoose-encryption");
+const md5 = require('md5'); 
 
 const app = express();
 
@@ -27,8 +27,9 @@ const userSchema = new mongoose.Schema ({
 //this encrypts the password when we do save() and decrypts when we do find()
 //we want to store our const secret as an environmental variable in our .env file
 // --- const secret = ""; would go here
-const secret = process.env.SECRET;
-userSchema.plugin(encrypt, {secret: secret, encryptedFields: ['password'] });
+/* const secret = process.env.SECRET;
+userSchema.plugin(encrypt, {secret: secret, encryptedFields: ['password'] }); */
+// level 2 done, moving on to level 3 - hashing with md5
 
 const User = new mongoose.model("User", userSchema); 
 
@@ -50,7 +51,7 @@ app.post("/register", (req, res) => {
 
     const newUser = new User( {
         email: req.body.username,
-        password: req.body.password
+        password: md5(req.body.password)
     });
 
     newUser.save( (err) => {
@@ -61,7 +62,8 @@ app.post("/register", (req, res) => {
 
 app.post('/login', (req,res) => {
     const username = req.body.username;
-    const password = req.body.password; 
+    //turn the password they typed and hash it; use the hashed version of the password to compare with the hashed value in our Database
+    const password = md5(req.body.password);
 
     User.findOne({ email: username}, (err, foundUser) =>{
         if(err) {
@@ -75,7 +77,7 @@ app.post('/login', (req,res) => {
         }
     })
 }
-)
+);
 
 
 app.listen("3000", function() {
