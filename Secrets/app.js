@@ -1,4 +1,5 @@
 //jshint esversion:6
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const ejs = require('ejs');
@@ -6,6 +7,7 @@ const mongoose = require("mongoose");
 const encrypt = require("mongoose-encryption");
 
 const app = express();
+
 
 app.use(express.static("public")); 
 app.set('view engine', 'ejs'); 
@@ -23,7 +25,9 @@ const userSchema = new mongoose.Schema ({
 });
 
 //this encrypts the password when we do save() and decrypts when we do find()
-const secret = "Thisisourlittlesecret.";
+//we want to store our const secret as an environmental variable in our .env file
+// --- const secret = ""; would go here
+const secret = process.env.SECRET;
 userSchema.plugin(encrypt, {secret: secret, encryptedFields: ['password'] });
 
 const User = new mongoose.model("User", userSchema); 
